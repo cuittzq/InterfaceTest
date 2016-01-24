@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceTest.UI", "Interfa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceTest.Common", "InterfaceTest.Common\InterfaceTest.Common.csproj", "{021B680A-9809-405B-9699-7BE72E3FC463}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterfaceTest.Business", "InterfaceTest.Business\InterfaceTest.Business.csproj", "{F1DB113B-3947-4296-BCCA-E08193996A53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{021B680A-9809-405B-9699-7BE72E3FC463}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{021B680A-9809-405B-9699-7BE72E3FC463}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{021B680A-9809-405B-9699-7BE72E3FC463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DB113B-3947-4296-BCCA-E08193996A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DB113B-3947-4296-BCCA-E08193996A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DB113B-3947-4296-BCCA-E08193996A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DB113B-3947-4296-BCCA-E08193996A53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
