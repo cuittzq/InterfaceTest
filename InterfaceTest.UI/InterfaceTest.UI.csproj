@@ -85,6 +85,10 @@
       <Project>{f1db113b-3947-4296-bcca-e08193996a53}</Project>
       <Name>InterfaceTest.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InterfaceTest.Common\InterfaceTest.Common.csproj">
+      <Project>{021b680a-9809-405b-9699-7be72e3fc463}</Project>
+      <Name>InterfaceTest.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

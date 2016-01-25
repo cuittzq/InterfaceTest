@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using InterfaceTest.Common;
 
 namespace InterfaceTest.UI
 {
@@ -40,20 +41,31 @@ namespace InterfaceTest.UI
             string requstPost = this.richTextBox1.Text.Trim();
             if (this.checkBox1.Checked)
             {
+                Dictionary<string, string> paramDic = new Dictionary<string, string>();
                 if (string.IsNullOrEmpty(requstPost))
                 {
-
+                    requsturl = this.GetTopsignUrl(requsturl);
+                    this.textBox1.Text = requsturl;
                 }
                 else
                 {
-                    Dictionary<string, object> paramDic = JsonConvert.DeserializeObject<Dictionary<string, object>>(requstPost);
-                    if (paramDic != null)
+                    paramDic = JsonConvert.DeserializeObject<Dictionary<string, string>>(requstPost);
+                    if (paramDic.Count > 0)
                     {
                         paramDic = paramDic.OrderBy(o => o.Key).ThenBy(o => o.Value).ToDictionary(p => p.Key, k => k.Value);
+                        if (paramDic.ContainsKey("top_sign"))
+                        {
+                            paramDic["top_sign"] = CommonBusiness.GetTop_sign(paramDic);
+                        }
+                        else
+                        {
+                            paramDic.Add("top_sign", CommonBusiness.GetTop_sign(paramDic));
+                        }
+
+                        requstPost = JsonConvert.SerializeObject(paramDic);
+                        this.richTextBox1.Text = requstPost;
                     }
-
                 }
-
             }
 
             if (!requsturl.StartsWith("http://"))
@@ -79,6 +91,50 @@ namespace InterfaceTest.UI
             ShowAction.ShowMsgEvent += new Action<string>(this.ShowMessge_ShowMsg);
             // 页面显示委托
             this.showMsgHandler = new Action<string>(this.PrintMsg);
+        }
+
+
+        /// <summary>
+        /// 加上校验参数
+        /// </summary>
+        /// <param name="requstUrl"></param>
+        /// <returns></returns>
+        private string GetTopsignUrl(string requstUrl)
+        {
+            Dictionary<string, string> paramDic = new Dictionary<string, string>();
+
+            string[] urlparams = requstUrl.Split('?');
+            string result = requstUrl;
+            if (urlparams != null)
+            {
+                result = urlparams[0];
+                urlparams = urlparams[1].Split('&');
+                if (urlparams != null)
+                {
+                    foreach (var item in urlparams)
+                    {
+                        if (item != "top_sign")
+                        {
+                            paramDic.Add(item.Split('=')[0], item.Split('=')[1]);
+                        }
+                    }
+                }
+
+                if (paramDic.Count > 0)
+                {
+                    paramDic = paramDic.OrderBy(o => o.Key).ThenBy(o => o.Value).ToDictionary(p => p.Key, k => k.Value);
+                    paramDic.Add("top_sign", CommonBusiness.GetTop_sign(paramDic));
+                    result = result + "?";
+
+                    foreach (var item in paramDic)
+                    {
+                        result += item.Key + "=" + item.Value + "&";
+                    }
+
+                    result = result.Remove(result.Length - 1, 1);
+                }
+            }
+            return result;
         }
     }
 }
