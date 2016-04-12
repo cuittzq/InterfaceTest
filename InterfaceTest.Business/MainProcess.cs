@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace InterfaceTest.Business
 {
@@ -20,6 +21,11 @@ namespace InterfaceTest.Business
         private string postContent = string.Empty;
 
         /// <summary>
+        /// 执行线程
+        /// </summary>
+        private Thread exetueThread = null;
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="url"></param>
@@ -28,6 +34,8 @@ namespace InterfaceTest.Business
         {
             this.url = url;
             this.postContent = postContent;
+            this.exetueThread = new Thread(Run);
+            this.exetueThread.IsBackground = true;
         }
 
         /// <summary>
@@ -36,7 +44,14 @@ namespace InterfaceTest.Business
         /// <returns></returns>
         public void Exetue()
         {
+            this.exetueThread.Start();
+        }
+
+        private void Run()
+        {
+            DateTime startTime = DateTime.Now;
             string responce = string.Empty;
+            ShowAction.ShowMsg("请求中。。。。");
             if (string.IsNullOrEmpty(this.url))
             {
                 responce = "URL错误";
@@ -52,8 +67,9 @@ namespace InterfaceTest.Business
             {
                 responce = HttpHelper.HttpPost(this.url, this.postContent);
             }
+            DateTime endTime = DateTime.Now;
 
-            ShowAction.ShowMsg(responce);
+            ShowAction.ShowMsg(string.Format("本次接口耗时{0} 响应：{1}", (endTime - startTime).TotalMilliseconds, responce));
         }
     }
 }

@@ -123,35 +123,51 @@ namespace InterfaceTest.Common
 
         public static string HttpPost(string url, string content)
         {
-            HttpWebRequest req = HttpWebRequest.Create(url)
-                     as HttpWebRequest;
-
-            if (req == null)
-                throw new ArgumentException();
-            var postdate = content;
-            var postBytes = Encoding.UTF8.GetBytes(postdate);
-            req.Method = "POST";
-            req.ContentType = "application/json; charset=utf-8";
-            req.ContentLength = postBytes.Length;
-            Stream stream = req.GetRequestStream();
-            stream.Write(postBytes, 0, postBytes.Length);
-            stream.Close();
-
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-            if (res.StatusCode != HttpStatusCode.OK)
-                throw new WebException("code" + res.StatusCode);
-
-
-            using (var rstream = res.GetResponseStream())
-            using (var reader = new System.IO.StreamReader(rstream, Encoding.UTF8))
+            HttpWebRequest req = HttpWebRequest.Create(url) as HttpWebRequest;
+            string result = string.Empty;
+            try
             {
-                var result = reader.ReadToEnd();
-                reader.Close();
-                rstream.Close();
+                if (req == null)
+                {
+                    throw new ArgumentException();
+                }
 
-                //res.Close();
-                return result;
+                var postdate = content;
+                var postBytes = Encoding.UTF8.GetBytes(postdate);
+                req.Method = "POST";
+                req.ContentType = "application/json; charset=utf-8";
+                //req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
+                req.ContentLength = postBytes.Length;
+                Stream stream = req.GetRequestStream();
+                stream.Write(postBytes, 0, postBytes.Length);
+                stream.Close();
+
+                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+                if (res.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new WebException("code" + res.StatusCode);
+                }
+
+                using (var rstream = res.GetResponseStream())
+                {
+                    using (var reader = new System.IO.StreamReader(rstream, Encoding.UTF8))
+                    {
+                        result = reader.ReadToEnd();
+                        reader.Close();
+                        rstream.Close();
+
+                        //res.Close();
+                        return result;
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                //throw new ArgumentException();
+                result = ex.ToString();
+            }
+
+            return result;
         }
 
         internal static string HttpGetFile(string url)
@@ -273,5 +289,23 @@ namespace InterfaceTest.Common
 
             return result;
         }
+    }
+
+    public enum HttpRequertType
+    {
+        /// <summary>
+        /// POST
+        /// </summary>
+        POST = 0,
+
+        /// <summary>
+        /// GET
+        /// </summary>
+        GET = 1,
+
+        /// <summary>
+        /// FILE
+        /// </summary>
+        FILE = 2
     }
 }
